@@ -17,7 +17,7 @@ def criar_entrada_estoque(entrada: EntradaEstoqueSchema):
 
     nova_entrada = {
         'data_entrada': entrada.data_entrada,
-        "produto": entrada.produto,
+        "referencia": entrada.referencia,
         "cor": entrada.cor,
         "tamanho": entrada.tamanho,
         "quantidade": entrada.quantidade,
@@ -31,7 +31,7 @@ def criar_entrada_estoque(entrada: EntradaEstoqueSchema):
 
     for item in estoque_atual:
         if (
-            item["produto"] == entrada.produto and
+            item["referencia"] == entrada.referencia and
             item["cor"] == entrada.cor and
             item["tamanho"] == entrada.tamanho
         ):
@@ -42,10 +42,11 @@ def criar_entrada_estoque(entrada: EntradaEstoqueSchema):
         item_encontrado["quantidade"] += entrada.quantidade
     else:
         novo_item_estoque = {
-            "produto": entrada.produto,
+            "referencia": entrada.referencia,
             "cor": entrada.cor,
             "tamanho": entrada.tamanho,
-            "quantidade": entrada.quantidade
+            "quantidade": entrada.quantidade,
+            "custo_unitario": entrada.custo_unitario
         }
         estoque_atual.append(novo_item_estoque)
 
