@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from database.database import SessionLocal
-from schemas.produto_schema import ProdutoSchema
+from schemas.produto_schema import ProdutoCriar, ProdutoAtualizar
 from models.produto_model import Produto
 
 router = APIRouter()
@@ -20,8 +20,21 @@ def listar_produtos(db: Session = Depends(pegar_banco)):
     produtos = db.query(Produto).all()
     return produtos
 
-def criar_produto(produto: ProdutoSchema, db: Session = Depends(pegar_banco)):
+@router.post("/")
+def criar_produto(produto: ProdutoCriar, db: Session = Depends(pegar_banco)):
+
+    produto_existente = (
+        db.query(Produto)
+        .filter(Produto.referencia == produto.referencia)
+        .first()
+    )
     
+    if produto_existente:
+        raise HTTPException(
+            status_code=400, 
+            detail="Referencia já existe"
+            )
+
     novo_produto = Produto(
         referencia=produto.referencia,
         nome=produto.nome,
