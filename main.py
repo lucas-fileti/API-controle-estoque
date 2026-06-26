@@ -1,9 +1,15 @@
 from fastapi import FastAPI
+
+from database.database import Base, engine 
+from models.produto_model import Produto
+
 from routes.categorias import router as categorias_router
 from routes.produtos import router as produtos_router
 from routes.estoque import router as estoque_router
 from routes.malha import router as malha_router
 from routes.entradas_estoque import router as entradas_estoque_router
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="API Stock Control",
